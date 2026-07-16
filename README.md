@@ -12,6 +12,10 @@
 An end-to-end analytics project that cleans, models, and visualizes customer churn for a telecom company — built to identify **who** is churning, **why**, and **how much revenue** is at stake, using SQL, Power Query, and Power BI.
 
 ---
+## Dashboard Preview
+
+🔗 [Click here to view the full interactive dashboard](https://drive.google.com/file/d/1YrCYW5VCL318LhkAUd05AGgJXT-TyLbb/view?usp=sharing)
+
 
 ## Table of Contents
 
