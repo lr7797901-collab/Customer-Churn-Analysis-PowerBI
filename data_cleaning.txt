@@ -1,0 +1,99 @@
+   Telecom Customer Churn Project
+   Data Cleaning & Transformation Queries
+   Table: customer_churn_1M
+   
+
+1. Preview the raw data
+SELECT TOP 100 *
+FROM customer_churn_1M;
+
+2. Check row count
+SELECT COUNT(*) AS total_rows
+FROM customer_churn_1M;
+
+3. Check for duplicate customer records
+SELECT customerID, COUNT(*) AS occurrences
+FROM customer_churn_1M
+GROUP BY customerID
+HAVING COUNT(*) > 1;
+
+4. Remove exact duplicate rows (if any)
+WITH ranked AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY customerID ORDER BY customerID) AS rn
+    FROM customer_churn_1M
+)
+DELETE FROM ranked
+WHERE rn > 1;
+
+-- 5. Check for NULL/missing values across key columns
+SELECT
+    SUM(CASE WHEN gender IS NULL THEN 1 ELSE 0 END)          AS missing_gender,
+    SUM(CASE WHEN SeniorCitizen IS NULL THEN 1 ELSE 0 END)   AS missing_senior_citizen,
+    SUM(CASE WHEN Partner IS NULL THEN 1 ELSE 0 END)         AS missing_partner,
+    SUM(CASE WHEN Dependents IS NULL THEN 1 ELSE 0 END)      AS missing_dependents,
+    SUM(CASE WHEN tenure IS NULL THEN 1 ELSE 0 END)          AS missing_tenure,
+    SUM(CASE WHEN Contract IS NULL THEN 1 ELSE 0 END)        AS missing_contract,
+    SUM(CASE WHEN MonthlyCharges IS NULL THEN 1 ELSE 0 END)  AS missing_monthly_charges,
+    SUM(CASE WHEN TotalCharges IS NULL THEN 1 ELSE 0 END)    AS missing_total_charges,
+    SUM(CASE WHEN Churn IS NULL THEN 1 ELSE 0 END)           AS missing_churn
+FROM customer_churn_1M;
+
+6. TotalCharges sometimes loads as text with blank strings for new customers
+--    (tenure = 0). Identify those rows.
+SELECT customerID, tenure, TotalCharges
+FROM customer_churn_1M
+WHERE TRIM(TotalCharges) = '' OR TotalCharges IS NULL;
+
+7. Fix TotalCharges: cast to numeric, replace blanks with 0
+--    (SQL Server syntax shown; use ::NUMERIC in PostgreSQL)
+UPDATE customer_churn_1M
+SET TotalCharges = 0
+WHERE TRIM(TotalCharges) = '';
+
+ALTER TABLE customer_churn_1M
+ALTER COLUMN TotalCharges DECIMAL(10,2);
+
+8. Standardize text values (trim spaces, fix casing inconsistencies)
+UPDATE customer_churn_1M
+SET gender     = TRIM(gender),
+    Partner    = TRIM(Partner),
+    Dependents = TRIM(Dependents),
+    Contract   = TRIM(Contract),
+    Churn      = TRIM(Churn);
+
+9. Recode SeniorCitizen from 0/1 to Yes/No for readability (optional)
+ALTER TABLE customer_churn_1M
+ADD SeniorCitizenLabel VARCHAR(3);
+
+UPDATE customer_churn_1M
+SET SeniorCitizenLabel = CASE WHEN SeniorCitizen = 1 THEN 'Yes' ELSE 'No' END;
+
+10. Create a Tenure Group column for grouped analysis
+ALTER TABLE customer_churn_1M
+ADD TenureGroup VARCHAR(10);
+
+UPDATE customer_churn_1M
+SET TenureGroup =
+    CASE
+        WHEN tenure <= 12 THEN '0-1 yr'
+        WHEN tenure <= 24 THEN '1-2 yr'
+        WHEN tenure <= 48 THEN '2-4 yr'
+        WHEN tenure <= 60 THEN '4-5 yr'
+        ELSE '5+ yr'
+    END;
+
+11. Validate Churn column only contains expected values
+SELECT DISTINCT Churn
+FROM customer_churn_1M;
+
+12. Check for outliers in MonthlyCharges / TotalCharges
+SELECT MIN(MonthlyCharges) AS min_monthly, MAX(MonthlyCharges) AS max_monthly,
+       MIN(TotalCharges)   AS min_total,   MAX(TotalCharges)   AS max_total
+FROM customer_churn_1M;
+
+13. Final sanity check after cleaning
+SELECT COUNT(*) AS final_row_count,
+       SUM(CASE WHEN TotalCharges IS NULL THEN 1 ELSE 0 END) AS remaining_nulls
+FROM customer_churn_1M;
+
