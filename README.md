@@ -103,7 +103,7 @@ Raw Data (CSV/Excel/SQL source)
 
 ## SQL — Data Cleaning & Exploration
 
-Full script: [`data_cleaning.sql`](data_cleaning.sql). Key steps:
+Full script: [`Customer churn SQL Quiries.pdf`](Customer%20churn%20SQL%20Quiries.pdf). Key steps:
 
 ```sql
 -- Check for duplicate customer records
