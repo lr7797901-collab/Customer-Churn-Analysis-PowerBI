@@ -144,7 +144,7 @@ The complete script also covers duplicate removal, NULL audits across all key co
 
 ## Power Query — Transformation Steps
 
-Full script: PowerQuery_ChurnDashboard_Documentation.pdf. Applied steps, in order:
+Full script:[ PowerQuery_ChurnDashboard_Documentation.pdf](https://github.com/lr7797901-collab/Customer-Churn-Analysis-PowerBI/blob/main/PowerQuery_ChurnDashboard_Documentation.pdf?utm_source=chatgpt.com). Applied steps, in order:
 
 1. Load source data
 2. Promote headers
@@ -158,7 +158,7 @@ Full script: PowerQuery_ChurnDashboard_Documentation.pdf. Applied steps, in orde
 
 ## DAX Measures
 
-Full reference: Telecom_Churn_DAX_Measures_Final.pdf.
+Full reference: [Telecom_Churn_DAX_Measures_Final.pdf](https://github.com/lr7797901-collab/Customer-Churn-Analysis-PowerBI/blob/main/Telecom_Churn_DAX_Measures_Final.pdf?utm_source=chatgpt.com).
 
 **Core**
 ```dax
