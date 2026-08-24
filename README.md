@@ -158,7 +158,7 @@ Full script: PowerQuery_ChurnDashboard_Documentation.pdf. Applied steps, in orde
 
 ## DAX Measures
 
-Full reference: [`dax_measures.pdf`](dax_measures.pdf).
+Full reference: Telecom_Churn_DAX_Measures_Final.pdf.
 
 **Core**
 ```dax
