@@ -144,7 +144,7 @@ The complete script also covers duplicate removal, NULL audits across all key co
 
 ## Power Query — Transformation Steps
 
-Full script: [`power_query_transform.pq`](power_query_transform.pq). Applied steps, in order:
+Full script: PowerQuery_ChurnDashboard_Documentation.pdf. Applied steps, in order:
 
 1. Load source data
 2. Promote headers
